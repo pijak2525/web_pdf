@@ -2,79 +2,66 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <!-- ปรับ Title ให้มี Keyword สำคัญ -->
-    <title>บริการแปลงไฟล์ Word เป็น PDF ออนไลน์ ฟรีและรวดเร็ว | PB.Com</title>
-    
-    <!-- เพิ่ม Description เพื่อดึงดูดคนคลิกในหน้าผลการค้นหา -->
-    <meta name="description" content="แปลงไฟล์ .docx เป็น .pdf ได้ง่ายๆ ด้วยระบบของ PB.Com ใช้งานฟรี แปลงไฟล์เอกสาร Word ของคุณให้เป็น PDF คุณภาพสูง รองรับภาษาไทย 100% สำหรับช่างคอมพิวเตอร์และทุกคน">
-    
-    <!-- เพิ่ม Keyword เพื่อให้ Google รู้ว่าเว็บเกี่ยวกับอะไร -->
-    <meta name="keywords" content="แปลงไฟล์ Word, แปลง Word เป็น PDF, PB.Com, เครื่องมือแปลงไฟล์ออนไลน์, docx to pdf, แปลงเอกสารไทย">
-    
+    <title>แปลงเอกสาร Word เป็น PDF | PB.Com</title>
+    <meta name="description" content="แปลงไฟล์ .docx เป็น .pdf ได้ง่ายๆ ด้วยระบบของ PB.Com ใช้งานฟรี คุณภาพสูง รองรับภาษาไทย 100%">
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --main: #6c5ce7; --bg: #f0f2f5; --glass: #ffffff; }
-        body { font-family: 'Prompt', sans-serif; background-color: var(--bg); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .dashboard { background: var(--glass); padding: 40px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 450px; border: 1px solid rgba(0,0,0,0.05); text-align: center; }
-        .header-section { margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
-        .header-section h1 { color: var(--main); margin: 0; font-size: 28px; }
-        .header-section p { color: #888; font-size: 14px; margin-top: 5px; }
-        .action-section { display: flex; flex-direction: column; gap: 15px; }
-        .upload-zone { border: 2px dashed #ddd; padding: 30px; border-radius: 15px; cursor: pointer; transition: 0.3s; background: #fafafa; }
-        .upload-zone:hover { border-color: var(--main); background: #f0f7ff; }
-        .btn-main { background: var(--main); color: white; padding: 18px; border-radius: 15px; border: none; cursor: pointer; font-weight: 600; font-size: 16px; box-shadow: 0 8px 15px rgba(108, 92, 231, 0.2); transition: 0.3s; }
-        .btn-main:hover { transform: translateY(-3px); background: #5a4ad1; }
+        body { font-family: 'Prompt', sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 400px; text-align: center; }
+        h1 { color: #333; font-size: 24px; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; margin-bottom: 30px; }
+        
+        .upload-area { border: 2px dashed #dee2e6; padding: 40px; border-radius: 15px; cursor: pointer; margin-bottom: 25px; transition: 0.3s; color: #888; }
+        .upload-area:hover { border-color: #6c5ce7; color: #6c5ce7; }
+        
+        .btn-convert { background: #6c5ce7; color: white; width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-convert:hover { background: #5a4ad1; }
+        
+        .counter { margin-top: 25px; font-size: 12px; color: #adb5bd; }
     </style>
 </head>
 <body>
 
-    <div class="dashboard">
-        <div class="header-section">
-            <h1>แปลงเอกสาร Word เป็น PDF</h1>
-            <p>ใช้งานได้ ฟรีๆๆ ครับ</p>
+    <div class="card">
+        <h1>แปลงเอกสาร Word เป็น PDF</h1>
+        <p>ใช้งานได้ ฟรีๆๆ ครับ</p>
+        
+        <div class="upload-area" onclick="document.getElementById('upload').click()">
+            <input type="file" id="upload" accept=".docx" style="display:none">
+            <span id="file-name">คลิกเพื่อเลือกไฟล์ Word</span>
         </div>
-
-        <div class="action-section">
-            <div class="upload-zone" onclick="document.getElementById('upload').click()">
-                <input type="file" id="upload" accept=".docx" style="display:none">
-                <span id="file-name">คลิกเพื่อเลือกไฟล์ Word</span>
-            </div>
-            <button class="btn-main" onclick="processAndPrint()">เริ่มการแปลงเอกสาร</button>
+        
+        <button class="btn-convert" onclick="processAndPrint()">เริ่มการแปลงเอกสาร</button>
+        
+        <div class="counter">
+            จำนวนผู้เข้าชมทั้งหมด: <span id="total-hits">...</span>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
     <script>
+        // ระบบนับยอด
+        fetch('https://api.counterapi.dev/v1/pb-converter/page-hits/up')
+            .then(res => res.json())
+            .then(data => document.getElementById('total-hits').innerText = data.count);
+
+        // เปลี่ยนชื่อไฟล์ใน UI
         document.getElementById('upload').addEventListener('change', function() {
             if(this.files.length > 0) document.getElementById('file-name').innerText = this.files[0].name;
         });
 
+        // ระบบแปลง
         async function processAndPrint() {
             const input = document.getElementById('upload');
-            if (!input.files[0]) return alert("กรุณาเลือกไฟล์ก่อนครับ");
+            if (!input.files[0]) return alert("กรุณาเลือกไฟล์ Word ก่อนครับ");
 
             const reader = new FileReader();
             reader.onload = async (e) => {
                 const result = await mammoth.convertToHtml({arrayBuffer: e.target.result});
-                const printWindow = window.open('', '_blank', 'width=900,height=700');
-                
-                printWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>Document Print | PB.Com</title>
-                            <style>
-                                body { font-family: 'Prompt', sans-serif; padding: 50px; line-height: 1.6; }
-                                table { border-collapse: collapse; width: 100%; }
-                                td, th { border: 1px solid #ddd; padding: 8px; }
-                                img { max-width: 100%; }
-                            </style>
-                        </head>
-                        <body>${result.value}</body>
-                    </html>
-                `);
-                
+                const printWindow = window.open('', '_blank', 'width=800,height=600');
+                printWindow.document.write(`<html><head><style>body{font-family:Prompt,sans-serif;padding:30px;}</style></head><body>${result.value}</body></html>`);
                 printWindow.document.close();
-                setTimeout(() => { printWindow.print(); }, 800);
+                setTimeout(() => { printWindow.print(); }, 500);
             };
             reader.readAsArrayBuffer(input.files[0]);
         }
